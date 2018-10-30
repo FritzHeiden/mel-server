@@ -1,24 +1,29 @@
 import { WebSocket } from 'mel-core'
-import SocketClient from 'socket.io-client'
+import ServerSocket from 'socket.io'
 
 export default class SocketIoWebSocket extends WebSocket {
-  constructor (host, port, { webRoot }) {
+  constructor (server) {
     super()
-    this._host = host
-    this._port = port
-    this._webRoot = '/'
-    if (webRoot) this._webRoot = webRoot
-    console.log('Making connection ...')
-    this._io = SocketClient(`http://${this._host}:${this._port}`, {
-      path: webRoot + 'socket'
-    })
+    this._server = server
   }
 
-  emit (event, data) {
-    return this._io.emit(event, data)
+  initialize (path) {
+    if (!this._server) {
+      throw new Exception('Cannot initialize WebSocket: No server provided!')
+    }
+    this._io = new ServerSocket(this._server, { path })
+    this._hasServer = true
   }
 
   on (event, callback) {
     return this._io.on(event, callback)
+  }
+
+  emit (event, data) {
+    this._io.emit(event, data)
+  }
+
+  get id () {
+    return this._io.id
   }
 }
