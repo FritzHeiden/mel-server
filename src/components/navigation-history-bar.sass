@@ -1,0 +1,27 @@
+.wrapper
+  display: flex
+  flex-direction: row
+
+  border-style: solid
+  border-color: rgb(50, 50, 50)
+  border-width: 0
+  border-bottom-width: 1px
+
+  line-height: 14px
+
+  & :not(:last-child)
+    margin-right: 5px
+
+  .splitter
+    padding: 10px 0
+
+  .element
+    display: flex
+    padding: 10px
+    line-height: inherit
+
+    &:hover
+      background-color: rgb(40, 40, 40)
+
+    & :first-child
+      margin-right: 5px

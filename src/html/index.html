@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        let request = new XMLHttpRequest();
+        request.open('GET', document.location, false);
+        request.send(null);
+        let base = request.getResponseHeader('Content-Base')
+        if (base[base.length - 1] !== '/') base += '/'
+        document.writeln('<base href="' + base + '" />')
+        console.log('BASE', base)
+    </script>
+    <meta charset="UTF-8"/>
+    <title>Mel</title>
+    <style>
+        body, #root {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        @font-face {
+            font-family: 'Oswald';
+            src: url(res/fonts/Oswald-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            src: url(res/fonts/OpenSans-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: url(res/fonts/Roboto-Regular.ttf);
+        }
+
+        a, a:hover, a:visited {
+            color: inherit;
+        }
+
+        .loaderWrapper {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(50, 50, 50);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 16pt;
+            color: rgb(230, 230, 230);
+            flex-direction: column;
+        }
+
+        .loaderWrapper > .spinner {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+            border: solid 5px rgb(230, 230, 230);
+            border-right: solid 5px transparent;
+            border-bottom: solid 5px transparent;
+            border-radius: 50%;
+            animation-name: spin;
+            animation-iteration-count: infinite;
+            animation-duration: 0.5s;
+            animation-timing-function: linear;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <div class="loaderWrapper">
+        <div class="spinner"></div>
+        Loading ...
+    </div>
+</div>
+<script src="mel-web.js"></script>
+</body>
+</html>

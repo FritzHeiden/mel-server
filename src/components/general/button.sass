@@ -1,0 +1,74 @@
+$accent-background: rgb(118, 177, 0)
+$accent-background-hover: lighten($accent-background, 5)
+$accent-background-active: darken($accent-background, 5)
+$accent-border: darken($accent-background, 20)
+$accent-text-color: darken($accent-border, 10)
+
+$generic-background: rgb(60, 60, 60)
+$generic-background-hover: lighten($generic-background, 5)
+$generic-background-active: darken($generic-background, 5)
+$generic-border: darken($generic-background, 15)
+$generic-text-color: rgb(170, 170, 170)
+
+
+.accent
+  color: $accent-text-color
+  background-color: $accent-background
+  box-shadow: inset 1px 1px 0 $accent-border, inset -1px -1px 0 $accent-border
+
+  &:hover
+    background-color: $accent-background-hover
+  &:active
+    background-color: $accent-background-active
+
+.accentDisabled
+  color: rgb(120, 120, 120)
+  background-color: desaturate(lighten(rgb(118, 177, 0), 30), 20)
+  box-shadow: inset 1px 1px 0 desaturate(rgb(118, 177, 0), 20), inset -1px -1px 0 desaturate(rgb(118, 177, 0), 20)
+
+  &:hover
+    background-color: desaturate(lighten(rgb(118, 177, 0), 30), 20)
+    cursor: not-allowed
+  &:active
+    background-color: desaturate(lighten(rgb(118, 177, 0), 30), 20)
+
+.generic
+  color: $generic-text-color
+  background-color: $generic-background
+  box-shadow: inset 1px 1px 0 $generic-border, inset -1px -1px 0 $generic-border
+
+  &:hover
+    background-color: $generic-background-hover
+
+  &:active
+    background-color: $generic-background-active
+
+.genericDisabled
+  color: rgb(120, 120, 120)
+  background-color: lighten(rgb(200, 200, 200), 20)
+  box-shadow: inset 1px 1px 0 rgb(200, 200, 200), inset -1px -1px 0 rgb(200, 200, 200)
+
+  &:hover
+    background-color: lighten(rgb(200, 200, 200), 20)
+    cursor: not-allowed
+
+  &:active
+    background-color: lighten(rgb(200, 200, 200), 20)
+
+.button
+  border-radius: 2px
+  cursor: pointer
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+  display: flex
+  justify-content: center
+  align-items: center
+
+  text-decoration: none
+
+  .spacer
+    height: 1px
+    width: 7px
