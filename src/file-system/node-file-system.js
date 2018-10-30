@@ -55,7 +55,7 @@ export default class NodeFileSystem extends FileSystem {
     let directory = directoryPath.split('/')
     directory.pop()
     let parentDirectoryPath = directory.join('/')
-    if (!(await this.stats(parentDirectoryPath))) {
+    if (!await this.stats(parentDirectoryPath)) {
       await this.makeDirectory(parentDirectoryPath)
     }
     return new Promise((resolve, reject) => {
@@ -95,6 +95,7 @@ export default class NodeFileSystem extends FileSystem {
     return new Promise((resolve, reject) => {
       fs.stat(path, (err, stats) => {
         if (err) {
+          console.error(err.message)
           resolve(null)
           return
         }
