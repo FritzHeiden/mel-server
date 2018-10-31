@@ -20,11 +20,11 @@
     "prettier-standard": "^8.0.1",
     "standard": "^11.0.1",
     "webpack": "^4.23.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "mel-core": "fritzendgltig/mel-core.git#develop"
   },
   "dependencies": {
     "express": "^4.16.3",
-    "mel-core": "fritzendgltig/mel-core#develop",
     "nedb": "^1.8.0",
     "socket.io": "^2.1.0"
   }
