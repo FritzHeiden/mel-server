@@ -12,6 +12,28 @@ export default class NodeFileSystem extends FileSystem {
     return this._APPLICATION_DIRECTORY;
   }
 
+  read(filePath, range) {
+    return new Promise((resolve, reject) => {
+      fs.open(filePath, (err, fd) => {
+        if (err) reject(err);
+        const bufferSize = range.end - range.start + 1;
+        const dataView = new DataView(new ArrayBuffer(bufferSize));
+        fs.read(
+          fd,
+          dataView,
+          0,
+          bufferSize,
+          range.start,
+          (err, bytesRead, buffer) => {
+            fs.close(fd, err => reject(err));
+            if (err) reject(err);
+            resolve(buffer);
+          }
+        );
+      });
+    });
+  }
+
   readFile(filePath) {
     return new Promise((resolve, reject) => {
       fs.readFile(
@@ -55,7 +77,7 @@ export default class NodeFileSystem extends FileSystem {
     let directory = directoryPath.split("/");
     directory.pop();
     let parentDirectoryPath = directory.join("/");
-    if (!await this.stats(parentDirectoryPath)) {
+    if (!(await this.stats(parentDirectoryPath))) {
       await this.makeDirectory(parentDirectoryPath);
     }
     return new Promise((resolve, reject) => {
@@ -101,7 +123,8 @@ export default class NodeFileSystem extends FileSystem {
 
         resolve({
           isDirectory: stats.isDirectory(),
-          lastModified: stats.mtime.getTime()
+          lastModified: stats.mtime.getTime(),
+          size: stats.size
         });
       });
     });
