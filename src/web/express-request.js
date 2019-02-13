@@ -1,12 +1,12 @@
-import { Request } from 'mel-core'
+import { Request } from "mel-core";
 
 export default class ExpressRequest extends Request {
-  constructor (request) {
-    super()
-    this._request = request
+  constructor(request) {
+    super();
+    this._request = request;
   }
 
-  getUrl () {
-    return this._request.url
+  getUrl() {
+    return this._request.url;
   }
 }

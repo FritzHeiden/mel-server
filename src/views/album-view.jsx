@@ -1,71 +1,71 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import FontAwesome from '@fortawesome/fontawesome'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faDotCircle from '@fortawesome/fontawesome-free-solid/faDotCircle'
-import faDownload from '@fortawesome/fontawesome-free-solid/faDownload'
-import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-import { Album } from 'mel-core'
+import React from "react";
+import { Link } from "react-router-dom";
+import FontAwesome from "@fortawesome/fontawesome";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import faDotCircle from "@fortawesome/fontawesome-free-solid/faDotCircle";
+import faDownload from "@fortawesome/fontawesome-free-solid/faDownload";
+import faCheck from "@fortawesome/fontawesome-free-solid/faCheck";
+import faUser from "@fortawesome/fontawesome-free-solid/faUser";
+import { Album } from "mel-core";
 
-import NavigationHistoryBar from '../components/navigation-history-bar'
-import styles from './album-view.sass'
-import DownloadService from '../services/download-service'
-import AlbumCover from '../components/album-cover'
+import NavigationHistoryBar from "../components/navigation-history-bar";
+import styles from "./album-view.sass";
+import DownloadService from "../services/download-service";
+import AlbumCover from "../components/album-cover";
 
 export default class AlbumView extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-    this.state.downloadService = DownloadService.getInstance()
-    this._gatherProps(props)
-    this.loadIcons()
-    this._loadAlbum()
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.state.downloadService = DownloadService.getInstance();
+    this._gatherProps(props);
+    this.loadIcons();
+    this._loadAlbum();
   }
 
-  componentWillReceiveProps (newProps) {
-    this._gatherProps(newProps)
-    this._loadAlbum()
+  componentWillReceiveProps(newProps) {
+    this._gatherProps(newProps);
+    this._loadAlbum();
   }
 
-  _gatherProps (props) {
-    this.state.melClientSocket = props.melClientSocket
-    this.state.albumId = props.match.params.albumId
+  _gatherProps(props) {
+    this.state.melClientSocket = props.melClientSocket;
+    this.state.albumId = props.match.params.albumId;
   }
 
-  loadIcons () {
-    FontAwesome.library.add(faDotCircle)
-    FontAwesome.library.add(faDownload)
-    FontAwesome.library.add(faCheck)
-    FontAwesome.library.add(faUser)
+  loadIcons() {
+    FontAwesome.library.add(faDotCircle);
+    FontAwesome.library.add(faDownload);
+    FontAwesome.library.add(faCheck);
+    FontAwesome.library.add(faUser);
   }
 
-  async _loadAlbum () {
-    let album = await this.state.melClientSocket.getAlbum(this.state.albumId)
+  async _loadAlbum() {
+    let album = await this.state.melClientSocket.getAlbum(this.state.albumId);
 
-    let tracks = []
+    let tracks = [];
 
     for (let track of album.tracks) {
-      tracks.push(await this.state.melClientSocket.getTrack(track.id))
+      tracks.push(await this.state.melClientSocket.getTrack(track.id));
     }
 
-    album.tracks = tracks
-    album.artist = await this.state.melClientSocket.getArtist(album.artist.id)
+    album.tracks = tracks;
+    album.artist = await this.state.melClientSocket.getArtist(album.artist.id);
 
-    console.log(album)
+    console.log(album);
 
-    this.state.album = album
-    this.setState(this.state)
+    this.state.album = album;
+    this.setState(this.state);
   }
 
-  _addToDownloads () {
-    const { downloadService } = this.state
+  _addToDownloads() {
+    const { downloadService } = this.state;
 
-    downloadService.addAlbum(this.state.album)
-    this.setState(this.state)
+    downloadService.addAlbum(this.state.album);
+    this.setState(this.state);
   }
 
-  renderTrackList () {
+  renderTrackList() {
     return this.state.album.tracks
       .sort((a, b) => a.number - b.number)
       .map(track => {
@@ -75,41 +75,41 @@ export default class AlbumView extends React.Component {
               <Link to={{ pathname: /artist/ + artist.id }}>
                 <span>
                   {artist.name}
-                  {index + 1 === album.artists.length ? '' : ', '}
+                  {index + 1 === album.artists.length ? "" : ", "}
                 </span>
               </Link>
-            ))
+            ));
           } else {
-            return ''
+            return "";
           }
-        }
+        };
         return (
           <div key={track.id}>
             <span>{track.number} </span>
             <span>{track.title}</span>
             {/* {listArtists(track.artists)} */}
           </div>
-        )
-      })
+        );
+      });
   }
 
-  renderOtherAlbums () {
+  renderOtherAlbums() {
     return this.state.album.artist.albums.map(album => (
       <div key={album.id}>
         <span>{album.year} </span>
         <span>{album.title}</span>
       </div>
-    ))
+    ));
   }
 
-  render () {
-    const { album } = this.state
+  render() {
+    const { album } = this.state;
     if (album) {
       return (
         <div className={styles.wrapper}>
           <NavigationHistoryBar
             locations={[
-              { name: 'Library', url: '/' },
+              { name: "Library", url: "/" },
               {
                 name: album.artist.name,
                 url: `/artist/${album.artist.id}`,
@@ -140,23 +140,23 @@ export default class AlbumView extends React.Component {
             </div>
           </div>
         </div>
-      )
+      );
     } else {
-      return <div>Loading ...</div>
+      return <div>Loading ...</div>;
     }
   }
 
-  _renderDownloadButton () {
-    const { downloadService } = this.state
+  _renderDownloadButton() {
+    const { downloadService } = this.state;
 
-    let icon
-    let text
+    let icon;
+    let text;
     if (downloadService.containsAlbum(this.state.album)) {
-      icon = faCheck
-      text = 'In Downloads List'
+      icon = faCheck;
+      text = "In Downloads List";
     } else {
-      icon = faDownload
-      text = 'Add to Downloads'
+      icon = faDownload;
+      text = "Add to Downloads";
     }
     return (
       <div className={styles.download} onClick={() => this._addToDownloads()}>
@@ -165,25 +165,25 @@ export default class AlbumView extends React.Component {
         </div>
         <div>{text}</div>
       </div>
-    )
+    );
   }
 
-  _renderTracks () {
-    let cdMap = new Map()
+  _renderTracks() {
+    let cdMap = new Map();
     this.state.album.tracks.forEach(track => {
-      let caption = `Disc ${track.discNumber}`
+      let caption = `Disc ${track.discNumber}`;
       if (!cdMap.get(caption)) {
-        cdMap.set(caption, [])
+        cdMap.set(caption, []);
       }
 
-      cdMap.get(caption).push(track)
-    })
+      cdMap.get(caption).push(track);
+    });
 
-    let elements = []
+    let elements = [];
     for (let [caption, tracks] of cdMap) {
-      let captionLabel
+      let captionLabel;
       if (cdMap.size > 1) {
-        captionLabel = <h3>{caption}</h3>
+        captionLabel = <h3>{caption}</h3>;
       }
       elements.push(
         <div key={caption} className={styles.discWrapper}>
@@ -195,9 +195,9 @@ export default class AlbumView extends React.Component {
             </div>
           ))}
         </div>
-      )
+      );
     }
 
-    return elements
+    return elements;
   }
 }

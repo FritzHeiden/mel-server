@@ -1,64 +1,64 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import FontAwesome from '@fortawesome/fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-import faDotCircle from '@fortawesome/fontawesome-free-solid/faDotCircle'
-import { Artist } from 'mel-core'
-import NavigationHistoryBar from '../components/navigation-history-bar'
-import styles from './artist-view.sass'
-import AlbumCover from '../components/album-cover'
+import React from "react";
+import { Link } from "react-router-dom";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import FontAwesome from "@fortawesome/fontawesome";
+import faUser from "@fortawesome/fontawesome-free-solid/faUser";
+import faDotCircle from "@fortawesome/fontawesome-free-solid/faDotCircle";
+import { Artist } from "mel-core";
+import NavigationHistoryBar from "../components/navigation-history-bar";
+import styles from "./artist-view.sass";
+import AlbumCover from "../components/album-cover";
 
 export default class ArtistView extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-    this._gatherProps(props)
-    this._loadArtist()
-    this.loadIcons()
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this._gatherProps(props);
+    this._loadArtist();
+    this.loadIcons();
   }
 
-  componentWillReceiveProps (newProps) {
-    this._gatherProps(newProps)
-    this._loadArtist()
+  componentWillReceiveProps(newProps) {
+    this._gatherProps(newProps);
+    this._loadArtist();
   }
 
-  _gatherProps (props) {
-    this.state.melClientSocket = props.melClientSocket
-    this.state.melHttpService = props.melHttpService
-    this.state.artist = new Artist(props.match.params.artistId)
+  _gatherProps(props) {
+    this.state.melClientSocket = props.melClientSocket;
+    this.state.melHttpService = props.melHttpService;
+    this.state.artist = new Artist(props.match.params.artistId);
   }
 
-  loadIcons () {
-    FontAwesome.library.add(faUser)
-    FontAwesome.library.add(faDotCircle)
+  loadIcons() {
+    FontAwesome.library.add(faUser);
+    FontAwesome.library.add(faDotCircle);
   }
 
-  async _loadArtist () {
+  async _loadArtist() {
     let artist = await this.state.melClientSocket.getArtist(
       this.state.artist.id
-    )
-    let albums = []
+    );
+    let albums = [];
     for (let album of artist.albums) {
-      albums.push(await this.state.melClientSocket.getAlbum(album.id))
+      albums.push(await this.state.melClientSocket.getAlbum(album.id));
     }
-    artist.albums = albums
-    let featureAlbums = []
+    artist.albums = albums;
+    let featureAlbums = [];
     for (let album of artist.featureAlbums) {
-      featureAlbums.push(await this.state.melClientSocket.getAlbum(album.id))
+      featureAlbums.push(await this.state.melClientSocket.getAlbum(album.id));
     }
-    artist.featureAlbums = featureAlbums
-    this.state.artist = artist
-    this.setState(this.state)
+    artist.featureAlbums = featureAlbums;
+    this.state.artist = artist;
+    this.setState(this.state);
   }
 
-  render () {
+  render() {
     if (this.state.artist) {
       return (
         <div className={styles.wrapper}>
           <NavigationHistoryBar
             locations={[
-              { name: 'Library', url: '/' },
+              { name: "Library", url: "/" },
               {
                 name: this.state.artist.name,
                 url: `/artist/${this.state.artist.id}`,
@@ -88,19 +88,19 @@ export default class ArtistView extends React.Component {
             </div>
           </div>
         </div>
-      )
+      );
     } else {
-      return <div>Loading ...</div>
+      return <div>Loading ...</div>;
     }
   }
 
-  _renderAlbumList (albums) {
-    const { melHttpService } = this.state
+  _renderAlbumList(albums) {
+    const { melHttpService } = this.state;
     return albums.sort((a, b) => b.year - a.year).map(album => (
       <Link
         key={album.id}
         className={styles.albumWrapper}
-        to={{ pathname: '/album/' + album.id }}
+        to={{ pathname: "/album/" + album.id }}
       >
         <div className={styles.coverWrapper}>
           <AlbumCover
@@ -113,6 +113,6 @@ export default class ArtistView extends React.Component {
         <div className={styles.title}>{album.title}</div>
         <div className={styles.year}>{album.year}</div>
       </Link>
-    ))
+    ));
   }
 }

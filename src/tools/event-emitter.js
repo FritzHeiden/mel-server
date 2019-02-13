@@ -1,27 +1,27 @@
 export default class EventEmitter {
-  constructor () {
-    this.listeners = []
+  constructor() {
+    this.listeners = [];
   }
-  on (name, callback) {
-    const listeners = this.listeners
+  on(name, callback) {
+    const listeners = this.listeners;
     if (!listeners[name]) {
-      listeners[name] = []
+      listeners[name] = [];
     }
-    listeners[name].push(callback)
+    listeners[name].push(callback);
   }
-  remove (name, listener) {
-    const listeners = this.listeners
+  remove(name, listener) {
+    const listeners = this.listeners;
     if (!listeners[name]) {
-      return
+      return;
     }
-    const index = listeners[name].indexOf(listener)
-    listeners[name] = listeners[name].splice(index, 1)
+    const index = listeners[name].indexOf(listener);
+    listeners[name] = listeners[name].splice(index, 1);
   }
-  invokeAll (name, data) {
-    const listeners = this.listeners
+  invokeAll(name, data) {
+    const listeners = this.listeners;
     if (!listeners[name]) {
-      return
+      return;
     }
-    listeners[name].forEach(listener => listener(data))
+    listeners[name].forEach(listener => listener(data));
   }
 }

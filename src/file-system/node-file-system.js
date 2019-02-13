@@ -1,109 +1,109 @@
-import path from 'path'
-import fs from 'fs'
-import { FileSystem } from 'mel-core'
+import path from "path";
+import fs from "fs";
+import { FileSystem } from "mel-core";
 
 export default class NodeFileSystem extends FileSystem {
-  constructor () {
-    super()
-    this._APPLICATION_DIRECTORY = path.dirname(process.mainModule.filename)
+  constructor() {
+    super();
+    this._APPLICATION_DIRECTORY = path.dirname(process.mainModule.filename);
   }
 
-  get APPLICATION_DIRECTORY () {
-    return this._APPLICATION_DIRECTORY
+  get APPLICATION_DIRECTORY() {
+    return this._APPLICATION_DIRECTORY;
   }
 
-  readFile (filePath) {
+  readFile(filePath) {
     return new Promise((resolve, reject) => {
       fs.readFile(
         path.resolve(filePath),
-        { encoding: 'utf-8' },
+        { encoding: "utf-8" },
         (err, data) => {
           if (err) {
-            resolve(null)
-            return
+            resolve(null);
+            return;
           }
-          resolve(data)
+          resolve(data);
         }
-      )
-    })
+      );
+    });
   }
 
-  readFileBuffer (filePath) {
+  readFileBuffer(filePath) {
     return new Promise((resolve, reject) => {
       fs.readFile(path.resolve(filePath), (err, buffer) => {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve(buffer.buffer)
-      })
-    })
+        resolve(buffer.buffer);
+      });
+    });
   }
 
-  async readDir (dirPath) {
+  async readDir(dirPath) {
     return new Promise((resolve, reject) => {
       fs.readdir(dirPath, (err, files) => {
         if (err) {
-          reject(err)
+          reject(err);
         }
-        resolve(files)
-      })
-    })
+        resolve(files);
+      });
+    });
   }
 
-  async makeDirectory (directoryPath) {
-    let directory = directoryPath.split('/')
-    directory.pop()
-    let parentDirectoryPath = directory.join('/')
+  async makeDirectory(directoryPath) {
+    let directory = directoryPath.split("/");
+    directory.pop();
+    let parentDirectoryPath = directory.join("/");
     if (!await this.stats(parentDirectoryPath)) {
-      await this.makeDirectory(parentDirectoryPath)
+      await this.makeDirectory(parentDirectoryPath);
     }
     return new Promise((resolve, reject) => {
       fs.mkdir(directoryPath, error => {
         if (error) {
-          reject(error)
+          reject(error);
         }
-        resolve()
-      })
-    })
+        resolve();
+      });
+    });
   }
 
-  writeFile (filePath, data) {
+  writeFile(filePath, data) {
     return new Promise((resolve, reject) => {
       fs.writeFile(filePath, data, err => {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve()
-      })
-    })
+        resolve();
+      });
+    });
   }
 
-  async writeBinaryFile (filePath, data) {
+  async writeBinaryFile(filePath, data) {
     return new Promise((resolve, reject) => {
-      fs.writeFile(filePath, data, { encoding: 'binary' }, err => {
+      fs.writeFile(filePath, data, { encoding: "binary" }, err => {
         if (err) {
-          reject(err)
+          reject(err);
         }
-        resolve()
-      })
-    })
+        resolve();
+      });
+    });
   }
 
-  stats (path) {
+  stats(path) {
     return new Promise((resolve, reject) => {
       fs.stat(path, (err, stats) => {
         if (err) {
-          resolve(null)
-          return
+          resolve(null);
+          return;
         }
 
         resolve({
           isDirectory: stats.isDirectory(),
           lastModified: stats.mtime.getTime()
-        })
-      })
-    })
+        });
+      });
+    });
   }
 }
