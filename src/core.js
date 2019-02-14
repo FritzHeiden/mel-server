@@ -7,6 +7,8 @@ import NodeFileSystem from "./file-system/node-file-system";
 import NedbDatabase from "./database/nedb-database";
 import SocketIoWebSocket from "./network/socket-io-web-socket";
 
+import Strings from "./tools/strings";
+
 const DEFAULT_CONFIG_PATH = "config.json";
 const RELATIVE_MEL_WEB_PATH = "/www";
 
@@ -37,7 +39,10 @@ export class MelServer {
   }
 
   async refreshFiles() {
+    console.log("Refreshing files ...");
+    const time = Date.now();
     await this._melCore.refreshFiles();
+    console.log(`Files refreshed in ${Strings.timestamp(Date.now() - time)}.`);
   }
 
   getPort() {
