@@ -14,7 +14,7 @@ export default class NodeFileSystem extends FileSystem {
 
   read(filePath, range) {
     return new Promise((resolve, reject) => {
-      fs.open(filePath, (err, fd) => {
+      fs.open(filePath, "r", (err, fd) => {
         if (err) reject(err);
         const bufferSize = range.end - range.start + 1;
         const dataView = new DataView(new ArrayBuffer(bufferSize));
