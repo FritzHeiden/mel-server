@@ -10,11 +10,11 @@ export default class NedbDatabase extends Database {
     this._db = [];
   }
 
-  async _loadDatabase(filePath) {
+  async _loadDatabase(databaseName) {
     const dataStore = new Datastore({
       filename: `${
         this._databaseDirectory
-      }/${DATABASE_DIRECTORY_NAME}/${filePath}`
+      }/${DATABASE_DIRECTORY_NAME}/${databaseName}.db`
     });
     dataStore.loadDatabase();
     return this._wrapDataStore(dataStore);
